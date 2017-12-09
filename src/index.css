@@ -2,4 +2,39 @@ body {
   margin: 0;
   padding: 0;
   font-family: sans-serif;
+  background-color: #c9c9c9;
+}
+
+.btn-success {
+  background-color: #3fb0ac !important;
+  border-color: #3fb0ac !important;
+}
+
+.btn-success:hover {
+  background-color: #173e43 !important;
+  border-color: #173e43 !important;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:focus {
+  background-color: #3fb0ac !important;
+  color: #ffffff !important;
+}
+
+.navbar-default .navbar-nav > .active > a:hover {
+  background-color: #173e43 !important;
+}
+
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a:hover {
+  background-color: #fae596 !important;
+  color: #ffffff !important;
+}
+
+a {
+  outline: none;
+}
+
+.btn, .nav-pills > li > a, .well {
+  border-radius: 0;
 }

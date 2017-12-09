@@ -1,0 +1,30 @@
+input[readonly] {
+  background-color: transparent;
+  border: 0;
+}
+
+textarea[readonly] {
+  background-color: transparent;
+  border: 0;
+  resize: vertical;
+  overflow-y: auto;
+}
+
+.progress-bar {
+  background-color: #fae596 !important;
+  color: #000000 !important;
+}
+
+.no-left-padding {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+}
+
+.no-right-padding {
+  padding-right: 0 !important;
+  margin-right: 0 !important;
+}
+
+.nested-form {
+  margin-top: 15px;
+}
