@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import {
   Form, Button, ButtonGroup
 } from 'react-bootstrap';
-import * as moment from 'moment';
 import TextInput from '../../../../components/TextInput/TextInput';
 import * as service from './EventBookingForm.service';
-import { checkAndSetFactory } from '../../../../utils/Utils';
+import {
+  checkAndSetFactory, handleStateChangeFactory, prepareReqBody
+} from '../../../../utils/Utils';
 
 
 class EventBookingForm extends Component {
@@ -24,17 +25,9 @@ class EventBookingForm extends Component {
     setAttr('available');
     this.idPrefix = 'booking-' + this.state.eventId + '-';
 
-    this.handleFullNameChange = this.handleChangeFactory('fullName');
-    this.handleEmailChange = this.handleChangeFactory('email');
-    this.handlePhoneNumberChange = this.handleChangeFactory('phoneNumber');
-  }
-
-  handleChangeFactory(attr) {
-    return (event) => {
-      let update = {};
-      update[attr] = event.target.value;
-      this.setState(update);
-    };
+    this.handleFullNameChange = handleStateChangeFactory(this, 'fullName');
+    this.handleEmailChange = handleStateChangeFactory(this, 'email');
+    this.handlePhoneNumberChange = handleStateChangeFactory(this, 'phoneNumber');
   }
 
   handleNumberChange = (event) => {
@@ -45,7 +38,7 @@ class EventBookingForm extends Component {
   };
 
   handleNumberFocusLost = () => {
-    if (this.state.total === '') {
+    if (this.state.number === '') {
       this.setState({
         number: this.defaultState.number,
       });
@@ -53,19 +46,14 @@ class EventBookingForm extends Component {
   }
 
   handleSubmit = (event) => {
-    let body = Object.assign({}, this.state);
-    body.startTime = moment(body.startTime).toJSON();
-    body.endTime = moment(body.endTime).toJSON();
-    console.log(body);
-    service.bookEvent(body, (res) => {});
-    this.setState(this.defaultState);
-    event.stopPropagation();
     event.preventDefault();
+    service.bookEvent(prepareReqBody(this.state), (res) => {});
+    this.setState(this.defaultState);
   }
 
   render() {
     return (
-          <Form>
+          <Form onSubmit={this.handleSubmit}>
             <TextInput
               required
               id={this.idPrefix + 'full-name'}
@@ -96,7 +84,7 @@ class EventBookingForm extends Component {
 
             <TextInput
               required
-              id={this.idPrefix + '-participants-number'}
+              id={this.idPrefix + 'participants-number'}
               type="number"
               label="Number of participants"
               value={this.state.number}
@@ -106,9 +94,8 @@ class EventBookingForm extends Component {
             <ButtonGroup justified>
               <ButtonGroup>
                 <Button
-                    type="button"
-                    bsStyle="success"
-                    onClick={this.handleSubmit}>
+                    type="submit"
+                    bsStyle="success">
                       Submit
                 </Button>
               </ButtonGroup>

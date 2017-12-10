@@ -7,8 +7,11 @@ import {
 import DateTime from 'react-datetime';
 import CenteredCol from '../../components/CenteredCol/CenteredCol';
 import TextInput from '../../components/TextInput/TextInput';
-import * as moment from 'moment';
+import moment from 'moment';
 import * as service from './EventCreation.service';
+import {
+  handleStateChangeFactory, prepareReqBody
+} from '../../utils/Utils';
 import 'react-datetime/css/react-datetime.css';
 import './EventCreation.css'
 
@@ -32,18 +35,15 @@ class EventCreation extends Component {
       this.state.startTime = moment(this.state.startTime);
       this.state.endTime = moment(this.state.endTime);
     } catch (err) {
-      // If there is no valid state object
-      // saved in the local storage, set state
-      // to default
       this.state = Object.assign({}, this.defaultState);
     }
 
     // Dynamically create onChange handlers
     for (let key in this.defaultState) {
       let handlerName = 'handle' + key.charAt(0).toUpperCase()
-                      + key.slice(1) + 'Change';
+        + key.slice(1) + 'Change';
       if (!key.endsWith('Time')) {
-        this[handlerName] = this.handleChangeFactory(key);
+        this[handlerName] = handleStateChangeFactory(this, key);
       }
     }
 
@@ -63,27 +63,8 @@ class EventCreation extends Component {
     };
   }
 
-  handleSubmit = (event) => {
-    let body = Object.assign({}, this.state);
-    body.startTime = moment(body.startTime).toJSON();
-    body.endTime = moment(body.endTime).toJSON();
-
-    service.createEvent(body, (res) => {});
-    this.setState(this.defaultState);
-    event.stopPropagation();
-    event.preventDefault();
-  }
-
   componentDidUpdate = () => {
     localStorage.setItem('new-event', JSON.stringify(this.state));
-  }
-
-  handleChangeFactory(attr) {
-    return (event) => {
-      let update = {};
-      update[attr] = event.target.value;
-      this.setState(update);
-    };
   }
 
   handleTotalFocusLost = () => {
@@ -121,11 +102,17 @@ class EventCreation extends Component {
     this.setState(this.defaultState);
   }
 
+  handleSubmit = (event) => {
+    event.preventDefault();
+    service.createEvent(prepareReqBody(this.state), (res) => {});
+    this.setState(this.defaultState);
+  }
+
   render() {
     return (
       <CenteredCol width={6}>
         <Well>
-          <Form id="event-creation-form">
+          <Form id="event-creation-form" onSubmit={this.handleSubmit}>
             <TextInput
               required
               id="event-name"
@@ -136,6 +123,7 @@ class EventCreation extends Component {
               value={this.state.name}
               onChange={this.handleNameChange}
               placeholder="Enter name" />
+
             <TextInput
               required
               id="event-description"
@@ -202,8 +190,7 @@ class EventCreation extends Component {
               <ButtonGroup>
                 <Button
                     type="submit"
-                    bsStyle="success"
-                    onClick={this.handleSubmit}>
+                    bsStyle="success">
                       Create
                 </Button>
               </ButtonGroup>

@@ -7,7 +7,7 @@ import {
     ControlLabel,
     Collapse
 } from 'react-bootstrap';
-import * as moment from 'moment';
+import moment from 'moment';
 import EventBookingForm from '../EventBookingForm/EventBookingForm';
 import TextInput from '../../../../components/TextInput/TextInput';
 import { checkAndSetFactory } from '../../../../utils/Utils';
@@ -34,16 +34,17 @@ class EventDetials extends Component {
     this.state.endTime = moment(this.state.endTime)
       .local().format(this.datetimeFormat);
 
+    this.prefix = 'details-' + this.state.id + '-';
     this.state.formVisible = false;
-    this.state.isValid = this.validateEventData();
+    this.state.isValid = this.validateEventData(this.state);
   }
 
-  validateEventData = () => {
+  validateEventData = (state) => {
     let now = moment();
-    return now.isBefore(this.state.startTime)
-      && now.isBefore(this.state.endTime)
-      && moment(this.state.startTime).isBefore(this.state.endTime)
-      && (this.state.available > 0);
+    return now.isBefore(state.startTime)
+      && now.isBefore(state.endTime)
+      && moment(state.startTime).isBefore(state.endTime)
+      && (state.available > 0);
   }
 
   toggleFormCollapse = (event) => {
@@ -62,7 +63,7 @@ class EventDetials extends Component {
         <Form>
             <TextInput
               readOnly
-              id="event-name"
+              id={this.prefix + "name"}
               type="text"
               label="Event name"
               value={this.state.name}
@@ -70,7 +71,7 @@ class EventDetials extends Component {
 
             <TextInput
               readOnly
-              id="event-description"
+              id={this.prefix + 'description'}
               type="textarea"
               label="Description"
               componentClass="textarea"
@@ -81,7 +82,7 @@ class EventDetials extends Component {
                 <Col lg={6} md={6} sm={12} xs={12} className="no-left-padding">
                   <TextInput
                     readOnly
-                    id="event-start-time"
+                    id={this.prefix + 'start-time'}
                     type="text"
                     label="Start time"
                     value={this.state.startTime} />
@@ -89,14 +90,14 @@ class EventDetials extends Component {
                 <Col lg={6} md={6} sm={12} xs={12} className="no-right-padding">
                   <TextInput
                     readOnly
-                    id="event-end-time"
+                    id={this.prefix + 'end-time'}
                     type="text"
                     label="End time"
                     value={this.state.endTime} />
                 </Col>
             </FormGroup>
 
-            <FormGroup inline="true" controlId={this.state.id}>
+            <FormGroup inline="true" controlId={this.prefix + 'available'}>
               <ControlLabel>Available / Total</ControlLabel>
               <ProgressBar
                 now={ (this.state.available * 100) / this.state.total }
@@ -107,6 +108,7 @@ class EventDetials extends Component {
               <ButtonGroup>
                 <Button
                     {...btnProps}
+                    id={this.prefix + 'book-btn'}
                     type="button"
                     bsStyle="success"
                     onClick={this.toggleFormCollapse}>
