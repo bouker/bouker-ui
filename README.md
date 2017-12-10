@@ -12,5 +12,5 @@ npm test
 ## Building Docker image
 ```
 docker build -t bouker/bouker-ui .
-docker run -p 3000:3000 bouker/bouker-events
+docker run -p 3000:3000 bouker/bouker-ui
 ```
