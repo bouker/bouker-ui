@@ -5,6 +5,7 @@ import { api } from '../../api';
 export function createEvent(body, callback) {
   axios.post(api['events'] + 'events', body)
     .then(res => {
+      console.log(res);
       callback(res);
     })
     .catch(error => {

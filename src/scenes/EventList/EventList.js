@@ -12,14 +12,15 @@ class EventList extends Component {
   }
 
   componentDidMount = () => {
-    service.loadEvents((events) => {
-      this.setState({ events: events });
+    service.loadEvents((res) => {
+      this.setState({ events: res.data });
     });
   }
 
   render() {
     const eventDetails = this.state.events
       .map((e) => {
+        e['key'] = e['id'];
         return <EventDetails {...e}/>;
       });
     return (

@@ -7,7 +7,6 @@ export function loadEvents(callback) {
     callback(res);
   })
   .catch(error => {
-    console.error(error);
     callback([]);
   });
 }
