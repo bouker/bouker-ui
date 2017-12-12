@@ -1,8 +1,9 @@
 import axios from 'axios';
-const api = require('../../config.json')['api'];
+import { api } from '../../api';
+
 
 export function createEvent(body, callback) {
-  axios.post(api['events'], body)
+  axios.post(api['events'] + 'events', body)
     .then(res => {
       callback(res);
     })
