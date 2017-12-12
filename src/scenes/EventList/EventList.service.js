@@ -4,7 +4,7 @@ import { api } from '../../api';
 export function loadEvents(callback) {
   axios.get(api['events'] + 'events')
   .then(res => {
-    callback(res);
+    callback(res.data);
   })
   .catch(error => {
     callback([]);

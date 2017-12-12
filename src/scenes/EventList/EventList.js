@@ -12,8 +12,8 @@ class EventList extends Component {
   }
 
   componentDidMount = () => {
-    service.loadEvents((res) => {
-      this.setState({ events: res.data });
+    service.loadEvents((events) => {
+      this.setState({ events: events });
     });
   }
 
