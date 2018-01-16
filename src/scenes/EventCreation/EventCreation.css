@@ -7,3 +7,18 @@
     padding-right: 0 !important;
     margin-right: 0 !important;
 }
+
+@keyframes success-notification {
+    50% { border-color: #5cb85c; }
+    100% { border-color: transparent; }
+}
+
+@-webkit-keyframes success-notification {
+    50% { border-color: #5cb85c; }
+    100% { border-color: transparent; }
+}
+
+.req-success {
+    animation: success-notification 500ms linear;
+    -webkit-animation: success-notification 500ms linear;
+}
