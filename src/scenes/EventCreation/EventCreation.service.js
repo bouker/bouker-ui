@@ -3,7 +3,7 @@ import { api } from '../../api';
 import { logger } from '../../logging/LoggingService';
 
 export function createEvent(body, callback) {
-  axios.post(api['events'] + 'events', body)
+  axios.post(api['events'] + '/events', body)
     .then(res => {
       logger.debug('Event ' + body['name'] + ' has been created successfully');
       callback(res.data);

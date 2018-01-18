@@ -3,7 +3,7 @@ import { api } from '../../api';
 import { logger } from '../../logging/LoggingService';
 
 export function loadEvents(callback) {
-  axios.get(api['events'] + 'events')
+  axios.get(api['events'] + '/events')
   .then(res => {
     callback(res.data);
   })
