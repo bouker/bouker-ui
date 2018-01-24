@@ -13,6 +13,7 @@ const severityToLevel = {
 const loggerFactory = (severity) => {
   let bodyTemplate = {
     'level': severityToLevel[severity],
+    'severity': severity,
     'facility': 'bouker-ui'
   };
   return (message) => {
@@ -28,13 +29,11 @@ const loggerFactory = (severity) => {
 }
 
 export const logger = {}
-for (let severity of ['info', 'debug', 'unknown']) {
-  logger[severity] = loggerFactory(severity);
-}
-for (let severity of ['warn', 'error']) {
+for (let severity in severityToLevel) {
   let logFun = loggerFactory(severity);
+  let consoleFun = (severity in console) ? console[severity] : console.error;
   logger[severity] = (message) => {
-    console.error(message);
+    consoleFun(message);
     logFun(message);
   };
 }
